@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 // Pruebas del header de la aplicación
 
 describe('Visualización del header de la aplicación', () => {
