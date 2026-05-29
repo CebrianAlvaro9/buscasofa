@@ -1,9 +1,30 @@
-@import '../styles/variables.css';
+@import "../styles/variables.css";
 
 .about-container {
-  background: var(--surface);
-  color: var(--text);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(37, 69, 71, 0.12);
+    background: var(--surface);
+    color: var(--text);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(37, 69, 71, 0.12);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.team-number {
+    margin: -0.5rem 0 2rem 0;
+    opacity: 0.8;
+}
+
+.members-list {
+    list-style: none;
+    padding: 0;
+}
+
+.member-item {
+    margin-bottom: 1.5rem;
+}
+
+.contributions {
+    margin-top: 0.5rem;
+    padding-left: 1.2rem;
 }

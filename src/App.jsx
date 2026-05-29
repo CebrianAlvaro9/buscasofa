@@ -16,6 +16,9 @@ import FuelTable from './components/FuelTable';
 import Register from './components/Register';
 import Login from './components/Login';
 import Footer from './components/Footer';
+import NotFound from './components/NotFound';
+import React from 'react';
+
 
 // Componente principal de la aplicación
 // Este componente es el punto de entrada de la aplicación y se encarga de gestionar las rutas y el estado global de la aplicación.
@@ -68,17 +71,16 @@ function App() {
       {
         error && <div className="error">Error: {error}</div>
       }
-      {!loading && !error && (
-        <Routes>
-          <Route path="/registro" element={<Register />} />
-          <Route path="/login" element={<Login onLogin={setUser} />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/" element={<Home stations={stations} />} />
-          <Route path="/mapa" element={<FuelMap stations={stations} />} />
-          <Route path="/lista" element={<FuelTable stations={stations} />} />
-          <Route path="/station/:id" element={<StationDetail stations={stations} user={user} />} />
-        </Routes>
-      )}
+      <Routes>
+        <Route path="/registro" element={<Register />} />
+        <Route path="/login" element={<Login onLogin={setUser} />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/" element={<Home stations={stations} />} />
+        <Route path="/mapa" element={<FuelMap stations={stations} />} />
+        <Route path="/lista" element={<FuelTable stations={stations} />} />
+        <Route path="/station/:id" element={<StationDetail stations={stations} user={user} />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <Footer />
     </BrowserRouter>
   )

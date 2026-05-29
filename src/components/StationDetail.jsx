@@ -3,6 +3,8 @@ import Comments from './Comments';
 
 import './StationDetail.css'
 import './Form.css'
+import React from 'react';
+
 
 
 function StationDetail({ stations, user }) {
@@ -24,7 +26,7 @@ function StationDetail({ stations, user }) {
       <p><strong>Municipio:</strong> {station['Municipio']}</p>
       <p><strong>Gasóleo A:</strong> {station['Precio Gasoleo A']}</p>
       <p><strong>Gasolina 95 E5:</strong> {station['Precio Gasolina 95 E5']}</p>
-      
+
       <Link to={gobackLink}> &lt;&lt; Volver
       </Link>
 

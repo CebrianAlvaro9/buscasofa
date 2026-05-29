@@ -1,18 +1,18 @@
-import React from 'react'
+import React from "react";
+
+import { members } from "../data/members";
 
 const Footer = () => {
   return (
     <div>
-        <h2>Miembros del equipo:</h2>
-        <ul>
-            <li>Javier García</li>
-            <li>Javier López</li>
-            <li>Javier Martínez</li>
-            <li>Javier Pérez</li>
-            <li>Javier Rodríguez</li>
-        </ul>
+      <h2>Miembros del equipo:</h2>
+      <ul>
+        {members.map((member, index) => (
+          <li key={index}>{member.name}</li>
+        ))}
+      </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

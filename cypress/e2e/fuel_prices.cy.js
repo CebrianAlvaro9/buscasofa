@@ -1,3 +1,6 @@
+
+/* eslint-disable no-undef */
+
 describe('Visualización de precios de combustibles en gasolineras españolas', () => {
   beforeEach(() => {
     cy.visit('/lista');
