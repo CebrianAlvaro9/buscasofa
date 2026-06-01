@@ -5,7 +5,7 @@ import './FuelTable.css';
 
 const PAGE_SIZE = 20;
 
-const FuelTable = ({ stations }) => {
+const FuelTable = ({ stations, loading = false, error = null }) => {
 
   // Filtros
   const [selectedProvince, setSelectedProvince] = useState('');
@@ -85,6 +85,7 @@ const FuelTable = ({ stations }) => {
   return (
     <div>
       <h2>Precios de combustibles en gasolineras españolas</h2>
+      {error && <div className="error">Error: {error}</div>}
       <FuelFilters
         provinces={provinces}
         cities={cities}
@@ -121,25 +122,35 @@ const FuelTable = ({ stations }) => {
           </tr>
         </thead>
         <tbody>
-          {paginatedStations.map((station, idx) => (
-            <tr key={station.IDEESS || idx}>
-              <td>{station['Rótulo']}</td>
-              <td>{station['Dirección']}</td>
-              <td>{station['Municipio']}</td>
-              <td>{station['Precio Gasoleo A']}</td>
-              <td>{station['Precio Gasolina 95 E5']}</td>
-              <td>
-                <Link
-                  to={`/station/${station.IDEESS}`}
-                  state={{
-                    gobackLink: "/lista"
-                  }}
-                >
-                  Ver detalle
-                </Link>
-              </td>
+          {loading ? (
+            <tr>
+              <td colSpan={6}>Cargando precios...</td>
             </tr>
-          ))}
+          ) : error ? (
+            <tr>
+              <td colSpan={6}>Error al cargar los datos</td>
+            </tr>
+          ) : (
+            paginatedStations.map((station, idx) => (
+              <tr key={station.IDEESS || idx}>
+                <td>{station['Rótulo']}</td>
+                <td>{station['Dirección']}</td>
+                <td>{station['Municipio']}</td>
+                <td>{station['Precio Gasoleo A']}</td>
+                <td>{station['Precio Gasolina 95 E5']}</td>
+                <td>
+                  <Link
+                    to={`/station/${station.IDEESS}`}
+                    state={{
+                      gobackLink: "/lista"
+                    }}
+                  >
+                    Ver detalle
+                  </Link>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       {/* Paginación */}

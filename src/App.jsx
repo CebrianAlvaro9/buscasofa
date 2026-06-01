@@ -17,6 +17,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Footer from './components/Footer';
 import Favorites from './components/Favorites';
+import NotFound from './components/NotFound';
+import React from 'react';
 
 // Componente principal de la aplicación
 // Este componente es el punto de entrada de la aplicación y se encarga de gestionar las rutas y el estado global de la aplicación.
@@ -34,21 +36,8 @@ function App() {
   const [loading, setLoading] = useState(true);   // Inicialmente cargando ...
   const [error, setError] = useState(null);
 
-    useEffect(() => {
-      fetchFuelPrices()
-        .then(data => {
-          console.log(data);
-          setStations(data.ListaEESSPrecio);
-          setLoading(false);
-        })
-        .catch(err => {
-          setError(err.message);
-          setLoading(false);
-        });
-    }, []);
-
-/*   useEffect(() => {
-    FuelApi.getInstance().getFuelPrices()
+  useEffect(() => {
+    fetchFuelPrices()
       .then(data => {
         console.log(data);
         setStations(data.ListaEESSPrecio);
@@ -58,29 +47,35 @@ function App() {
         setError(err.message);
         setLoading(false);
       });
-  }, []); */
+  }, []);
+
+  /*   useEffect(() => {
+      FuelApi.getInstance().getFuelPrices()
+        .then(data => {
+          console.log(data);
+          setStations(data.ListaEESSPrecio);
+          setLoading(false);
+        })
+        .catch(err => {
+          setError(err.message);
+          setLoading(false);
+        });
+    }, []); */
 
   return (
     <BrowserRouter>
       <Header user={user} />
-      {
-        loading && <div className="loading">Cargando...</div>
-      }
-      {
-        error && <div className="error">Error: {error}</div>
-      }
-      {!loading && !error && (
-        <Routes>
-          <Route path="/registro" element={<Register />} />
-          <Route path="/login" element={<Login onLogin={setUser} />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/" element={<Home stations={stations} />} />
-          <Route path="/mapa" element={<FuelMap stations={stations} />} />
-          <Route path="/lista" element={<FuelTable stations={stations} />} />
-          <Route path="/favoritos" element={<Favorites stations={stations} />} />
-          <Route path="/station/:id" element={<StationDetail stations={stations} user={user} />} />
-        </Routes>
-      )}
+      <Routes>
+        <Route path="/registro" element={<Register />} />
+        <Route path="/login" element={<Login onLogin={setUser} />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/" element={<Home stations={stations} loading={loading} error={error} />} />
+        <Route path="/mapa" element={<FuelMap stations={stations} loading={loading} error={error} />} />
+        <Route path="/lista" element={<FuelTable stations={stations} loading={loading} error={error} />} />
+        <Route path="/favoritos" element={<Favorites stations={stations} />} />
+        <Route path="/station/:id" element={!loading && !error ? <StationDetail stations={stations} user={user} /> : <div className="loading">Cargando...</div>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <Footer />
     </BrowserRouter>
   )
