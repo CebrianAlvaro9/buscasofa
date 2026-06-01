@@ -20,7 +20,7 @@ function getAverage(values: string[]) {
 }
 
 
-const Home = ({ stations }) => {
+const Home = ({ stations, loading = false, error = null }) => {
 
   console.log(stations);
 
@@ -32,7 +32,6 @@ const Home = ({ stations }) => {
       return { ...fuel, avg };
     }).sort((a, b) => (b.avg && a.avg ? parseFloat(b.avg) - parseFloat(a.avg) : 0));
   }, [stations]);
-  console.log(nationalSummary);
 
   // Por comunidad autónoma
   const regionSummary = useMemo(() => {
@@ -48,15 +47,14 @@ const Home = ({ stations }) => {
     });
   }, [stations]);
 
-
-  console.log(regionSummary)
-
   return (
     <div className="home-container">
       <h1>Buscasofa</h1>
       <div className='description'>
         El mejor buscador de precios de combustible de España.
       </div>
+
+      {error && <div className="error">Error: {error}</div>}
 
       <h2 className='resumen-nacional'>Resumen nacional de precios</h2>
       <table className='resumen-nacional'>
@@ -67,12 +65,21 @@ const Home = ({ stations }) => {
           </tr>
         </thead>
         <tbody>
-          {nationalSummary.map(fuel => (
-            <tr key={fuel.key}>
-              <td>{fuel.label}</td>
-              <td>{fuel.avg ?? 'N/A'}</td>
-            </tr>
-          ))}
+          {loading ? (
+            FUEL_TYPES.map(fuel => (
+              <tr key={fuel.key}>
+                <td>{fuel.label}</td>
+                <td>Cargando...</td>
+              </tr>
+            ))
+          ) : (
+            nationalSummary.map(fuel => (
+              <tr key={fuel.key}>
+                <td>{fuel.label}</td>
+                <td>{fuel.avg ?? 'N/A'}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
@@ -87,14 +94,25 @@ const Home = ({ stations }) => {
           </tr>
         </thead>
         <tbody>
-          {regionSummary.map(region => (
-            <tr key={region.regionName}>
-              <td>{region.regionName}</td>
-              {region.fuelPrices.map(fuel => (
-                <td key={fuel.key}>{fuel.avg ?? 'N/A'}</td>
-              ))}
-            </tr>
-          ))}
+          {loading ? (
+            COMUNIDADES_AUTONOMAS.map(region => (
+              <tr key={region.id}>
+                <td>{region.name}</td>
+                {FUEL_TYPES.map(fuel => (
+                  <td key={fuel.key}>Cargando...</td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            regionSummary.map(region => (
+              <tr key={region.regionName}>
+                <td>{region.regionName}</td>
+                {region.fuelPrices.map(fuel => (
+                  <td key={fuel.key}>{fuel.avg ?? 'N/A'}</td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
@@ -104,4 +122,4 @@ const Home = ({ stations }) => {
   )
 }
 
-export default Home 
+export default Home
