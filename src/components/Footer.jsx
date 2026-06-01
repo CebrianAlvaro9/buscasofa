@@ -3,12 +3,13 @@ import React from 'react'
 const Footer = () => {
   return (
     <div>
-        <h2>Miembros del equipo N04:</h2>
+        <h2>Miembros del equipo:</h2>
         <ul>
-            <li>Alvaro Cebrian Urueña</li>
-            <li>Helenio Padrón Álvarez</li>
-            <li>Fernando Javier Rodriguez García Rendueles</li>
-            <li>Xabier Arroitajauregui Elguea</li>
+            <li>Javier García</li>
+            <li>Javier López</li>
+            <li>Javier Martínez</li>
+            <li>Javier Pérez</li>
+            <li>Javier Rodríguez</li>
         </ul>
     </div>
   )
