@@ -16,6 +16,7 @@ import FuelTable from './components/FuelTable';
 import Register from './components/Register';
 import Login from './components/Login';
 import Footer from './components/Footer';
+import Favorites from './components/Favorites';
 import NotFound from './components/NotFound';
 import React from 'react';
 
@@ -71,6 +72,7 @@ function App() {
         <Route path="/" element={<Home stations={stations} loading={loading} error={error} />} />
         <Route path="/mapa" element={<FuelMap stations={stations} loading={loading} error={error} />} />
         <Route path="/lista" element={<FuelTable stations={stations} loading={loading} error={error} />} />
+        <Route path="/favoritos" element={<Favorites stations={stations} />} />
         <Route path="/station/:id" element={!loading && !error ? <StationDetail stations={stations} user={user} /> : <div className="loading">Cargando...</div>} />
         <Route path="*" element={<NotFound />} />
       </Routes>

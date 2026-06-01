@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import './FuelMap.css'
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -7,10 +7,17 @@ import 'leaflet/dist/leaflet.css';
 
 import { getDistanceKm } from '@/apis/utils';
 import React from 'react';
+import { addFavorite, removeFavorite, isFavorite } from '../utils/favorites';
 
 const icon = new L.Icon({
   iconUrl: './gas-pump.png',
   iconAnchor: [12, 41],
+});
+
+const favoriteIcon = new L.Icon({
+  iconUrl: './gas-pump.png',
+  iconAnchor: [12, 41],
+  className: 'marker-favorite',
 });
 
 const userIcon = new L.Icon({
@@ -28,6 +35,16 @@ function FuelMap({ stations, loading = false, error = null }) {
   const [filterRotulo, setFilterRotulo] = useState('');
   const [radius, setRadius] = useState(5); // Nuevo estado para el radio
   const markerRef = useRef(null);
+  const [favoritesTick, setFavoritesTick] = useState(0);
+
+  const toggleFavoriteForStation = (stationId) => {
+    if (isFavorite(stationId)) {
+      removeFavorite(stationId);
+    } else {
+      addFavorite(stationId);
+    }
+    setFavoritesTick((t) => t + 1);
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -122,27 +139,42 @@ function FuelMap({ stations, loading = false, error = null }) {
         >
           <Tooltip>Tu ubicación</Tooltip>
         </Marker>
-        {filteredStations.map((station, idx) => (
-          <Marker
-            key={idx}
-            position={[parseFloat(station['Latitud'].replace(',', '.')), parseFloat(station['Longitud (WGS84)'].replace(',', '.'))]}
-            icon={icon}
-            eventHandlers={{
-              click: () => navigate(`/station/${station.IDEESS}`,
-                {
-                  state: {
-                    gobackLink: "/mapa"
-                  }
-                })
-            }}
-          >
-            <Tooltip>
-              <strong>{station['Rótulo']}</strong><br />
-              {station['Dirección']}<br />
-              {station['Municipio']}
-            </Tooltip>
-          </Marker>
-        ))}
+        {filteredStations.map((station, idx) => {
+          const favorited = isFavorite(station.IDEESS);
+          return (
+            <Marker
+              key={`${idx}-${favorited ? 'fav' : 'reg'}`}
+              position={[parseFloat(station['Latitud'].replace(',', '.')), parseFloat(station['Longitud (WGS84)'].replace(',', '.'))]}
+              icon={favorited ? favoriteIcon : icon}
+            >
+              <Tooltip>
+                <strong>{station['Rótulo']}</strong><br />
+                {station['Dirección']}<br />
+                {station['Municipio']}
+              </Tooltip>
+              <Popup>
+                <div className='map-popup'>
+                  <strong>{station['Rótulo']}</strong><br />
+                  {station['Dirección']}<br />
+                  {station['Municipio']}<br /><br />
+                  <button
+                    className={`favorite-toggle ${favorited ? 'remove-favorite' : 'add-favorite'}`}
+                    onClick={() => toggleFavoriteForStation(station.IDEESS)}
+                  >
+                    {favorited ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+                  </button>
+                  <br /><br />
+                  <Link
+                    to={`/station/${station.IDEESS}`}
+                    state={{ gobackLink: '/mapa' }}
+                  >
+                    Ver detalle
+                  </Link>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
 
 
