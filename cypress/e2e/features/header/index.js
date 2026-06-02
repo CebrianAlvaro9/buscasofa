@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 import { Given, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 Given('el usuario navega a la home', () => {
